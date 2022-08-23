@@ -62,6 +62,9 @@ class Game extends React.Component {
     if (calculateWinner(squares) || squares[i]) return;
 
     squares[i] = this.state.xIsNext ? "X" : "O";
+    // if(this.state.isChecked) {
+    //   i = history.length
+    // }
     this.setState({
       history: history.concat([
         {
@@ -96,19 +99,41 @@ class Game extends React.Component {
       fontWeight: "normal",
     };
 
-    const history = this.state.history;
+    var history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
+    /* 
+      if set to descending order, history is reversed
+     */
+    if (this.state.isChecked) {
+      history = history.slice().reverse();
+    }
+
     const moves = history.map((step, move) => {
       const clickedSquare = step.clickedSquare;
-      const desc = move
-        ? `Move #${move} - (${clickedSquare[0]},${clickedSquare[1]})`
-        : `Go to game start`;
+
+      var desc;
+      var key;
+      if (this.state.isChecked) {
+        // descending order
+        key = this.state.stepNumber - move;
+        desc =
+          move === this.state.stepNumber
+            ? `Go to game start`
+            : `Move #${key} - (${clickedSquare[0]},${clickedSquare[1]})`;
+      } else {
+        // ascending order
+        key = move;
+        desc = move
+          ? `Move #${key} - (${clickedSquare[0]},${clickedSquare[1]})`
+          : `Go to game start`;
+      }
+
       return (
-        <li key={move}>
+        <li key={key}>
           <button
-            style={this.state.stepNumber === move ? active : inactive}
+            style={this.state.stepNumber === key ? active : inactive}
             onClick={() => this.jumpTo(move)}
           >
             {desc}

@@ -71,6 +71,7 @@ ul {
   height: 26px;
   width: 50px;
   border-radius: 50px;
+  margin-right: 5px;
 }
 
 .ball {
@@ -83,4 +84,12 @@ ul {
 
   transition: transform 0.2s linear;
   background-color: white;
+}
+
+.toggleSwitch {
+  margin-top: 10px;
+  font-size: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
 }
