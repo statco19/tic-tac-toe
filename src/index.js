@@ -5,7 +5,7 @@ import "./index.scss";
 
 function Square(props) {
   return (
-    <button className="square" onClick={props.onClick}>
+    <button className="square" onClick={props.onClick} style={props.style}>
       {props.value}
     </button>
   );
@@ -13,9 +13,25 @@ function Square(props) {
 
 class Board extends React.Component {
   renderSquare(i) {
+    const active = {
+      backgroundColor: "gray",
+    };
+
+    const inactive = {
+      backgroundColor: "white",
+    };
+    var style;
+    if (this.props.line.includes(i)) {
+      style = active;
+    } else {
+      style = inactive;
+    }
+
     return (
       <Square
         key={i}
+        style={style}
+        gameover={this.props.gameover}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
@@ -47,6 +63,7 @@ class Game extends React.Component {
         {
           squares: Array(9).fill(null),
           clickedSquare: [0, 0],
+          line: [-1, -1, -1],
         },
       ],
       xIsNext: true,
@@ -62,14 +79,12 @@ class Game extends React.Component {
     if (calculateWinner(squares) || squares[i]) return;
 
     squares[i] = this.state.xIsNext ? "X" : "O";
-    // if(this.state.isChecked) {
-    //   i = history.length
-    // }
     this.setState({
       history: history.concat([
         {
           squares: squares,
           clickedSquare: [Math.floor(i / 3 + 1), Math.floor((i % 3) + 1)], // (row, col)
+          line: getIndices(squares),
         },
       ]),
       stepNumber: history.length,
@@ -143,6 +158,7 @@ class Game extends React.Component {
     });
 
     let status;
+    let line = this.state.history[this.state.stepNumber].line;
     if (winner) {
       status = "Winner: " + winner;
     } else {
@@ -153,6 +169,8 @@ class Game extends React.Component {
       <div className="game">
         <div className="game-board">
           <Board
+            line={line}
+            gameover={this.state.gameover}
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
           />
@@ -188,6 +206,36 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function getIndices(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  for (let i = 0; i < lines.length; ++i) {
+    const [a, b, c] = lines[i];
+
+    if (
+      squares[a] != null &&
+      squares[b] != null &&
+      squares[c] != null &&
+      squares[a] &&
+      squares[a] === squares[b] &&
+      squares[a] === squares[c]
+    ) {
+      return [a, b, c];
+    }
+  }
+
+  return [-1, -1, -1];
 }
 
 // ========================================
