@@ -50,6 +50,7 @@ class Game extends React.Component {
       history: [
         {
           squares: Array(9).fill(null),
+          clickedSquare: [0, 0],
         },
       ],
       xIsNext: true,
@@ -68,6 +69,7 @@ class Game extends React.Component {
       history: history.concat([
         {
           squares: squares,
+          clickedSquare: [Math.floor(i / 3 + 1), Math.floor((i % 3) + 1)], // (row, col)
         },
       ]),
       stepNumber: history.length,
@@ -86,15 +88,12 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
-    var prev = history[0].squares;
 
     const moves = history.map((step, move) => {
-      const curr = step.squares;
-      const [row, col] = getCoordinate(prev, curr, move);
-
+      const clickedSquare = step.clickedSquare;
       const desc = move
-        ? "Location: (" + row + "," + col + ")"
-        : "Go to game start";
+        ? `Move #${move} - (${clickedSquare[0]},${clickedSquare[1]})`
+        : `Go to game start`;
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
@@ -124,21 +123,6 @@ class Game extends React.Component {
       </div>
     );
   }
-}
-
-function getCoordinate(prev, curr, move) {
-  var row = 0;
-  var col = 0;
-  if (move != 0) {
-    for (let i = 0; i < 9; ++i) {
-      if (prev[i] != curr[i]) {
-        row = parseInt(i / 3) + 1;
-        col = parseInt(i % 3) + 1;
-      }
-    }
-    prev = curr;
-  }
-  return [row, col];
 }
 
 function calculateWinner(squares) {
