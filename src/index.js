@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import Switch from "./components/Switch";
 import "./index.css";
 
 function Square(props) {
@@ -50,6 +51,7 @@ class Game extends React.Component {
       ],
       xIsNext: true,
       stepNumber: 0,
+      isChecked: false,
     };
   }
 
@@ -76,6 +78,12 @@ class Game extends React.Component {
     this.setState({
       stepNumber: step,
       xIsNext: step % 2 === 0,
+    });
+  }
+
+  handleToggle() {
+    this.setState({
+      isChecked: !this.state.isChecked,
     });
   }
 
@@ -126,6 +134,10 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <Switch
+            isChecked={this.state.isChecked}
+            handleToggle={() => this.handleToggle()}
+          />
           <ol>{moves}</ol>
         </div>
       </div>
