@@ -5,7 +5,16 @@ const Switch = (props) => {
 
   return (
     <div className="switch">
-      <input type="checkbox" checked={isChecked} onChange={handleToggle} />
+      <input
+        type="checkbox"
+        className={`switch-checkbox`}
+        checked={isChecked}
+        onChange={handleToggle}
+        id={`switch-input`}
+      />
+      <label className={`switch-label`} htmlFor={`switch-input`}>
+        <div className="ball" />
+      </label>
     </div>
   );
 };
