@@ -86,21 +86,11 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
-
     var prev = history[0].squares;
+
     const moves = history.map((step, move) => {
-      var row = 0;
-      var col = 0;
-      var curr = step.squares;
-      if (move != 0) {
-        for (let i = 0; i < 9; ++i) {
-          if (prev[i] != curr[i]) {
-            row = parseInt(i / 3) + 1;
-            col = parseInt(i % 3) + 1;
-          }
-        }
-        prev = curr;
-      }
+      const curr = step.squares;
+      const [row, col] = getCoordinate(prev, curr, move);
 
       const desc = move
         ? "Location: (" + row + "," + col + ")"
@@ -134,6 +124,21 @@ class Game extends React.Component {
       </div>
     );
   }
+}
+
+function getCoordinate(prev, curr, move) {
+  var row = 0;
+  var col = 0;
+  if (move != 0) {
+    for (let i = 0; i < 9; ++i) {
+      if (prev[i] != curr[i]) {
+        row = parseInt(i / 3) + 1;
+        col = parseInt(i % 3) + 1;
+      }
+    }
+    prev = curr;
+  }
+  return [row, col];
 }
 
 function calculateWinner(squares) {
