@@ -31,7 +31,6 @@ class Board extends React.Component {
       <Square
         key={i}
         style={style}
-        gameover={this.props.gameover}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
@@ -170,7 +169,6 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             line={line}
-            gameover={this.state.gameover}
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
           />
