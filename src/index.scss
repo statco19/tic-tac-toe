@@ -60,6 +60,7 @@ ul {
 
 .switch-checkbox {
   display: none;
+
   &:checked + .switch-label .ball {
     transform: translateX(24px);
   }
@@ -70,8 +71,6 @@ ul {
   height: 26px;
   width: 50px;
   border-radius: 50px;
-
-  background-color: green;
 }
 
 .ball {

@@ -3,8 +3,16 @@ import React from "react";
 const Switch = (props) => {
   const { isChecked, handleToggle } = props;
 
+  const active = {
+    backgroundColor: "green",
+  };
+
+  const inactive = {
+    backgroundColor: "gray",
+  };
+
   return (
-    <div className="switch">
+    <div className="switch" style={isChecked === true ? active : inactive}>
       <input
         type="checkbox"
         className={`switch-checkbox`}
